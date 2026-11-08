@@ -79,21 +79,88 @@
   .hud .score { color: var(--accent); }
   .hud .enemies { color: var(--green); }
 
+  .main-layout {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .side-panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    width: 230px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-self: center;
+  }
+  .side-panel h2 {
+    font-size: 17px;
+    letter-spacing: 1px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--panel-border);
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .side-panel .section { display: flex; flex-direction: column; gap: 8px; }
+  .side-panel .section h3 {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 600;
+    letter-spacing: 2px;
+  }
+  .key-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .key-row .keys { display: flex; gap: 4px; flex-wrap: wrap; }
+  .key-row .desc { color: var(--text-dim); margin-left: auto; font-size: 12px; }
+
+  kbd {
+    background: #1f1f2b;
+    border: 1px solid var(--panel-border);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: 2px 7px;
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .legend { display: flex; flex-direction: column; gap: 9px; }
+  .legend-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); }
+  .legend-item .icon { width: 24px; height: 24px; border-radius: 5px; flex-shrink: 0; }
+  .legend-item .icon.brick { background: #b0542a; }
+  .legend-item .icon.steel { background: #9ca3af; }
+  .legend-item .icon.base { background: #f5c542; }
+  .legend-item .icon.player { background: #f5c542; border-radius: 50%; }
+  .legend-item .icon.enemy { background: #e06a4a; border-radius: 50%; }
+
+  .tips { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
   .controls {
+    display: none;
     color: var(--text-dim);
     font-size: 13px;
     text-align: center;
     line-height: 1.8;
   }
-  .controls kbd {
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-bottom-width: 2px;
-    border-radius: 5px;
-    padding: 2px 8px;
-    font-family: inherit;
-    color: var(--text);
-    margin: 0 2px;
+
+  @media (max-width: 1350px) {
+    .side-panel { display: none; }
+    .controls { display: block; }
   }
 
   .overlay {
@@ -140,8 +207,24 @@
 <body>
   <h1><span class="tank-icon">🛡️</span>坦克大战<span class="tank-icon">⚔️</span></h1>
 
-  <div class="game-wrap">
-    <div class="hud">
+  <div class="main-layout">
+    <aside class="side-panel">
+      <h2>🎮 操作说明</h2>
+      <div class="section">
+        <h3>移动</h3>
+        <div class="key-row"><span class="keys"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></span><span class="desc">方向键</span></div>
+        <div class="key-row"><span class="keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span class="desc">WASD</span></div>
+      </div>
+      <div class="section">
+        <h3>射击与功能</h3>
+        <div class="key-row"><span class="keys"><kbd>空格</kbd><kbd>J</kbd></span><span class="desc">发射炮弹</span></div>
+        <div class="key-row"><span class="keys"><kbd>P</kbd></span><span class="desc">暂停/继续</span></div>
+        <div class="key-row"><span class="keys"><kbd>Enter</kbd></span><span class="desc">开始/重开</span></div>
+      </div>
+    </aside>
+
+    <div class="game-wrap">
+      <div class="hud">
       <div class="stat"><span class="label">分数</span><span class="value score" id="score">0</span></div>
       <div class="stat"><span class="label">生命</span><span class="value lives" id="lives">3</span></div>
       <div class="stat"><span class="label">剩余敌人</span><span class="value enemies" id="enemies">20</span></div>
@@ -154,6 +237,29 @@
       <div class="subtitle" id="overlay-subtitle">摧毁所有敌方坦克，保卫你的基地！<br>方向键 / WASD 移动，空格 / J 发射炮弹</div>
       <button id="start-btn">开始游戏</button>
     </div>
+  </div>
+
+    <aside class="side-panel">
+      <h2>📖 游戏说明</h2>
+      <div class="section">
+        <h3>游戏目标</h3>
+        <div class="tips">摧毁所有敌方坦克，同时保卫你的基地！基地被毁则游戏失败。</div>
+      </div>
+      <div class="section">
+        <h3>图例</h3>
+        <div class="legend">
+          <div class="legend-item"><span class="icon player"></span>你的坦克</div>
+          <div class="legend-item"><span class="icon enemy"></span>敌方坦克</div>
+          <div class="legend-item"><span class="icon brick"></span>砖墙（可摧毁）</div>
+          <div class="legend-item"><span class="icon steel"></span>钢墙（不可摧毁）</div>
+          <div class="legend-item"><span class="icon base"></span>基地（保护它！）</div>
+        </div>
+      </div>
+      <div class="section">
+        <h3>得分规则</h3>
+        <div class="tips">每消灭一辆敌方坦克 +100 分，通关有额外奖励。共 5 关，难度递增。</div>
+      </div>
+    </aside>
   </div>
 
   <div class="controls">
@@ -174,10 +280,10 @@
   const ROWS = canvas.height / CELL;  // 30
 
   const DIRS = {
-    up:    { x: 0,  y: -1, angle: -Math.PI / 2 },
-    right: { x: 1,  y: 0,  angle: 0 },
-    down:  { x: 0,  y: 1,  angle: Math.PI / 2 },
-    left:  { x: -1, y: 0,  angle: Math.PI },
+    up:    { x: 0,  y: -1, angle: 0 },
+    right: { x: 1,  y: 0,  angle: Math.PI / 2 },
+    down:  { x: 0,  y: 1,  angle: Math.PI },
+    left:  { x: -1, y: 0,  angle: -Math.PI / 2 },
   };
   const DIR_LIST = ['up', 'right', 'down', 'left'];
 
